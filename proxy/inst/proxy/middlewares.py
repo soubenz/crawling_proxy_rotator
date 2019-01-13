@@ -8,7 +8,7 @@
 from scrapy import signals
 
 
-class InstagramSpiderMiddleware(object):
+class ProxySpiderMiddleware(object):
     # Not all methods need to be defined. If a method is not defined,
     # scrapy acts as if the spider middleware does not modify the
     # passed objects.
@@ -56,7 +56,7 @@ class InstagramSpiderMiddleware(object):
         spider.logger.info('Spider opened: %s' % spider.name)
 
 
-class InstagramDownloaderMiddleware(object):
+class ProxyDownloaderMiddleware(object):
     # Not all methods need to be defined. If a method is not defined,
     # scrapy acts as if the downloader middleware does not modify the
     # passed objects.
@@ -101,3 +101,38 @@ class InstagramDownloaderMiddleware(object):
 
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)
+
+
+
+class CustomProxyMiddleware(object):
+    def process_request(self, request, spider):
+        request.meta['proxy'] = "https://<PROXY_IP_OR_URL>:<PROXY_PORT>"
+        request.headers['Proxy-Authorization'] = basic_auth_header(
+            '<PROXY_USERNAME>', '<PROXY_PASSWORD>')
+
+
+        url = 'http://proxy.crawlera.com:8010'
+    maxbans = 400
+    ban_code = 503
+    download_timeout = 190
+    # Handle crawlera server failures
+    connection_refused_delay = 90
+    preserve_delay = False
+    header_prefix = 'X-Crawlera-'
+    conflicting_headers = ('X-Crawlera-Profile', 'X-Crawlera-UA')
+
+    _settings = [
+        ('apikey', str),
+        ('user', str),
+        ('pass', str),
+        ('url', str),
+        ('maxbans', int),
+        ('download_timeout', int),
+        ('preserve_delay', bool),
+    ]
+
+    def __init__(self, crawler):
+        self.crawler = crawler
+        self.job_id = os.environ.get('SCRAPY_JOB')
+        self._bans = defaultdict(int)
+        self._saved_delays = defaultdict(lambda: None)

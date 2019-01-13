@@ -7,7 +7,7 @@ from scrapy.shell import inspect_response
 import sys
 import json
 import requests
-from instagram.items import Proxy
+from proxy.items import Proxy
 import time
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
