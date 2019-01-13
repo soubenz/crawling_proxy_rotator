@@ -11,7 +11,7 @@ from scrapy.exceptions import ScrapyDeprecationWarning
 from twisted.internet.error import ConnectionRefusedError, ConnectionDone
 
 
-class PXRMiddleware(object):
+class PRXRMiddleware(object):
     url = 'http://127.0.0.1:80'
 
     download_timeout = 190
@@ -34,8 +34,8 @@ class PXRMiddleware(object):
     def __init__(self, crawler):
         self.crawler = crawler
         # self.job_id = os.environ.get('SCRAPY_JOB')
-        self._bans = defaultdict(int)
-        self._saved_delays = defaultdict(lambda: None)
+        # self._bans = defaultdict(int)
+        # self._saved_delays = defaultdict(lambda: None)
 
 
     @classmethod
@@ -98,4 +98,5 @@ class PXRMiddleware(object):
             return response
 
 
-    
+    def _is_enabled_for_request(self, request):
+        return self.enabled and not request.meta.get('dont_proxy', False)
