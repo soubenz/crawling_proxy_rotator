@@ -57,10 +57,16 @@ CONCURRENT_REQUESTS = 10
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
-   'proxy.middlewares.ProxyDownloaderMiddleware': None,
-   'proxy.prxr.middleware.PRXRMiddleware': 300,
+   # 'proxy.middlewares.ProxyDownloaderMiddleware': None,
+   # 'proxy.prxr.middleware.PRXRMiddleware': 300,
 }
 PRXR_URL = "http://127.0.0.1:80"
+
+ITEM_PIPELINES = {
+    'scrapy_redis.pipelines.RedisPipeline': 300,
+       'proxy.pipelines.ProxyPipeline': 350,
+    
+}
 # Enable or disable extensions
 # See https://doc.scrapy.org/en/latest/topics/extensions.html
 #EXTENSIONS = {
