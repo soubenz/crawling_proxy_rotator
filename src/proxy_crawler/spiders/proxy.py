@@ -40,7 +40,7 @@ class HashtagCrawler(scrapy.Spider):
         chrome_options = Options()
         chrome_options.add_argument('--headless')
         chrome_options.add_argument("--window-size=%s" % WINDOW_SIZE)
-        self.driver = webdriver.Chrome(executable_path = "/usr/local/bin/chromedriver", chrome_options=chrome_options)
+        self.driver = webdriver.Chrome(executable_path ="/usr/local/bin/chromedriver", chrome_options=chrome_options)
     def start_requests(self):
         url = "https://google.dz"
         yield Request(url, callback=self.parse_proxy)
@@ -57,9 +57,9 @@ class HashtagCrawler(scrapy.Spider):
         # self.logger.info(html)
         # print([country.split('-icon-')[-1] for country in all_countries])
         # self.logger.info(all_countries)
-        for i in range(10):
+        for i in range(50):
             skip = i * 64
-            url = 'https://hidemyna.me/en/proxy-list/?maxtime=1000&type=h&start={}#list'.format(skip)  
+            url = 'https://hidemyna.me/en/proxy-list/?country=UADEARALINBGBRBDCACZUSGBHUIDNLRUESFR&maxtime=1000&type=h&start={}#list'.format(skip)  
             print(url)
             self.driver.get(url)
             element = WebDriverWait(self.driver, 30).until(
