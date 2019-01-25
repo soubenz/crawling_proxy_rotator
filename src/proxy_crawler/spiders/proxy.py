@@ -36,6 +36,24 @@ class HashtagCrawler(scrapy.Spider):
             'accept-language': 'en-US,en;q=0.9,fr;q=0.8,ar;q=0.7',
             'cookie': '__cfduid=d23b4b0b150eb5aeb20c0b7a5b05cf9281546696275; cf_clearance=b1f0f71d1d01c4c0ea07eb53b43e5909126ad133-1546696280-86400-150; t=91870879; PAPVisitorId=5d6f31b28b5c865876fdz0qiKJEL0b6U; _ga=GA1.2.134502053.1546696282; _gid=GA1.2.38007589.1546696282; _ym_uid=1546696282557813519; _ym_d=1546696282; _fbp=fb.1.1546696281644.1649520089; _ym_wasSynced=%7B%22time%22%3A1546696281898%2C%22params%22%3A%7B%22eu%22%3A1%7D%2C%22bkParams%22%3A%7B%7D%7D; _ym_visorc_42065329=w; _ym_isad=1; jv_enter_ts_EBSrukxUuA=1546696282909; jv_visits_count_EBSrukxUuA=1; jv_refer_EBSrukxUuA=https%3A%2F%2Fhidemyna.me%2Fen%2Fproxy-list%2F; jv_utm_EBSrukxUuA=; PHPSESSID=7nttuivncf7ckcqncgbojrqet6; _dc_gtm_UA-90263203-1=1; _gat_UA-90263203-1=1; jv_pages_count_EBSrukxUuA=13',
         }
+        self.countries_max = {
+            "de": 80,
+            "ua": 100,
+            "in": 80,         
+            "al": 30,
+            "bg": 100,
+            "ca": 50,
+            "cz": 100,
+            "us": 100,
+            "gb": 30,
+            "hu": 80,
+            "id":20,
+            "nl": 100,
+            "ru": 100,
+            "es": 100,
+            "fr": 100,           
+
+        }
         WINDOW_SIZE = "1920,1080"
         chrome_options = Options()
         chrome_options.add_argument('--headless')
@@ -57,9 +75,10 @@ class HashtagCrawler(scrapy.Spider):
         # self.logger.info(html)
         # print([country.split('-icon-')[-1] for country in all_countries])
         # self.logger.info(all_countries)
+        countries = {}
         for i in range(50):
             skip = i * 64
-            url = 'https://hidemyna.me/en/proxy-list/?country=UADEARALINBGBRBDCACZUSGBHUIDNLRUESFR&maxtime=1000&type=h&start={}#list'.format(skip)  
+            url = 'https://hidemyna.me/en/proxy-list/?country=UADEARALINBGBRBDCACZUSGBHUIDNLRUESFR&maxtime=1000&start={}#list'.format(skip)
             print(url)
             self.driver.get(url)
             element = WebDriverWait(self.driver, 30).until(
@@ -76,6 +95,11 @@ class HashtagCrawler(scrapy.Spider):
                 # print(country_alt_raw)
                 if country_alt_raw:
                     country_alt = country_alt_raw.split('icon-')[-1]
+                    if country_alt in countries:
+                        countries[country_alt] += 1
+                    else:
+                        countries[country_alt] = 0
+
                 else:
                     country_alt = None
                 speed = r.css('div.bar p::text').extract_first()
@@ -86,5 +110,8 @@ class HashtagCrawler(scrapy.Spider):
                 p['country_alt'] = country_alt
                 p['speed'] = speed
                 p['protocol'] = p_type
-                if p_type:
-                    yield p
+                if p_type and country_alt in self.countries_max:
+                    if countries[country_alt] <= self.countries_max[country_alt]:
+                        yield p
+            time.sleep(10)
+        self.logger.info(countries)
