@@ -113,7 +113,7 @@ class Haproxy(object):
 		slots = slots
 		for server in servers:
 			# print(backend)
-			if server[2].lower() == backend or backend == "all":
+			if server[2].lower() == backend:
 				if "%s:%s" % (server[0],server[1]) in slots:
 					pass
 						# print (haproxy_active_backends["%s:%s" % (backend[0],backend[1])]) #Ignore backends already set

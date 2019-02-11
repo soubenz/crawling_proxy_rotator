@@ -76,9 +76,9 @@ class HashtagCrawler(scrapy.Spider):
         # print([country.split('-icon-')[-1] for country in all_countries])
         # self.logger.info(all_countries)
         countries = {}
-        for i in range(50):
+        for i in range(7):
             skip = i * 64
-            url = 'https://hidemyna.me/en/proxy-list/?country=UADEARALINBGBRBDCACZUSGBHUIDNLRUESFR&maxtime=1000&start={}#list'.format(skip)
+            url = 'https://hidemyna.me/en/proxy-list/?country=UADEARALINBGBRBDCACZUSGBHUIDNLRUESFR&type=h&maxtime=1000&start={}#list'.format(skip)
             print(url)
             self.driver.get(url)
             element = WebDriverWait(self.driver, 30).until(

@@ -33,7 +33,7 @@ class HashtagCrawler(scrapy.Spider):
 
     name = 'test'
     prxr_enabled = True
-    prxr_country = "EN"
+    # prxr_country = "EN"
     # prxr_url = "http://127.0.0.1:80"
 
     def __init__(self, *args, **kwargs):
@@ -41,11 +41,18 @@ class HashtagCrawler(scrapy.Spider):
 
    
     def start_requests(self):
-        url = "http://www.google.com"
+        url = "http://api.ipify.org"
         # headers = {"country": "FR"}
         yield Request(url, callback=self.parse_proxy)
 
     def parse_proxy(self, response):
-        # print(response.body)
-        print(response.headers)
+        print(response.body)
+        # print(response.headers)
+        url = "https://kooora.com"
+        yield Request(url, callback=self.test)
+
+
+    def test(self, response):
+        # print(response.headers)
+        pass
         # print(response.request.headers)

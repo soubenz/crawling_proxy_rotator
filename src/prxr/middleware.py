@@ -13,12 +13,12 @@ class PRXRMiddleware(object):
     # connection_refused_delay = 90
     preserve_delay = False
     header_prefix = '-'
-    country = 'EN'
+    # country = 'EN'
     # r_header = 
     _settings = [
         # ('r_header', bool),
         # ('user', str),
-        ('country', str),
+        ('country', list),
         ('url', str),
         ('download_timeout', int),
         # ('preserve_delay', bool),

@@ -37,7 +37,7 @@ class ProxyPipeline(object):
         for backend in backends_list:
             backends_slots = self.haproxy.get_slots(backend)
             self.haproxy.set_servers(self.proxies, backend, backends_slots)
-            self.logger.info(backend)
-            self.logger.info(backends_slots)
-        self.logger.info(self.proxies)
+            # self.logger.info(backend)
+            # self.logger.info(backends_slots)
+        # self.logger.info(self.proxies)
         # logging.log(logging.INFO, "[ERRORS_SUMMARY]:\n" + json.dumps(self.summary, indent=4, sort_keys=True))
